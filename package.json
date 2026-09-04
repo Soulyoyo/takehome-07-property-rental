@@ -1,0 +1,25 @@
+{
+  "name": "takehome-07-property-rental",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Property Rental & Maintenance System - Portfolio, Rent Ledger, Maintenance Tracking, and Executive Dashboard",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "start": "npm run start --workspace=server",
+    "test": "npm run test --workspace=server",
+    "seed": "npm run seed --workspace=server"
+  },
+  "keywords": [
+    "property-management",
+    "maintenance-tracking",
+    "rent-ledger"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -10,3 +10,9 @@ venv/
 .env.*.local
 *.log
 .DS_Store
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
