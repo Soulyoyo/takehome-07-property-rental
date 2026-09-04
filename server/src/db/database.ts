@@ -21,9 +21,7 @@ export function getDb(customPath?: string): Database.Database {
   }
 
   // Load and run schema
-  const currentDir = typeof __dirname !== 'undefined' 
-    ? __dirname 
-    : path.dirname(fileURLToPath(import.meta.url));
+  const currentDir = path.dirname(fileURLToPath(import.meta.url));
   const schemaPath = path.resolve(currentDir, 'schema.sql');
   if (fs.existsSync(schemaPath)) {
     const schemaSql = fs.readFileSync(schemaPath, 'utf8');

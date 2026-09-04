@@ -6,7 +6,7 @@ export function seedDatabase(customDb?: any) {
 
   console.log('🌱 Seeding database with realistic rental portfolio data...');
 
-  // 1. Clear existing data
+  // 1. Clear existing data and reset auto-increment counters
   db.exec(`
     DELETE FROM rent_alert_dismissals;
     DELETE FROM maintenance_timeline;
@@ -15,6 +15,14 @@ export function seedDatabase(customDb?: any) {
     DELETE FROM rent_payments;
     DELETE FROM units;
     DELETE FROM users;
+    DELETE FROM sqlite_sequence WHERE name IN (
+      'rent_alert_dismissals',
+      'maintenance_timeline',
+      'maintenance_requests',
+      'rent_payments',
+      'units',
+      'users'
+    );
   `);
 
   // 2. Insert Users
