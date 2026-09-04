@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { config } from '../config.js';
+import { SCHEMA_SQL } from './schema.js';
 
 let dbInstance: Database.Database | null = null;
 
@@ -20,13 +21,8 @@ export function getDb(customPath?: string): Database.Database {
     db.pragma('journal_mode = WAL');
   }
 
-  // Load and run schema
-  const currentDir = path.dirname(fileURLToPath(import.meta.url));
-  const schemaPath = path.resolve(currentDir, 'schema.sql');
-  if (fs.existsSync(schemaPath)) {
-    const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-    db.exec(schemaSql);
-  }
+  // Apply schema
+  db.exec(SCHEMA_SQL);
 
   if (!customPath) {
     dbInstance = db;

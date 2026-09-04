@@ -1,8 +1,115 @@
 # Architecture
 
-Answer each of these, in your own words, once the system has taken real shape.
+## What are the moving pieces, and how do they talk to each other?
 
-- What are the moving pieces, and how do they talk to each other?
-- Where does each piece run?
-- What is the request path for one representative user action, end to end?
-- What did you decide *not* to build, and why?
+The system is structured as a decoupled, multi-tiered web application designed for clarity, testability, and strict boundary enforcement:
+
+1. **Client Tier (Single-Page Application)**:
+   - Built with **React 18** and **TypeScript**, bundled by **Vite**.
+   - Styled entirely with an extensible, custom **Vanilla CSS Design System** (custom CSS custom properties, responsive grids, dark/light surface tokens, micro-animations, accessible modal dialogs).
+   - Manages user sessions, role-adaptive navigation, client-side optimistic feedback, and UI toasts.
+   - Communicates with the backend exclusively over HTTP via standard JSON REST endpoints (`/api/*`), attaching JWT authentication bearer tokens to every privileged request.
+
+2. **Server Tier (RESTful Application Layer)**:
+   - Built with **Node.js**, **Express 5**, and **TypeScript**.
+   - Follows a layered domain architecture:
+     - `routes/`: Declares HTTP route definitions and applies middleware chains.
+     - `middleware/`: Enforces JWT verification (`requireAuth`) and role-based access control (`requireRole('property_manager')`).
+     - `controllers/`: Handles HTTP status codes, parses request bodies/query params, and formats standardized JSON envelopes.
+     - `services/`: Encapsulates all domain logic, transaction boundaries, state machine validation, and business rules (e.g. grace period thresholds, bulk matching algorithms, timeline audit event emissions).
+     - `db/`: Manages SQLite connections, PRAGMA optimizations (WAL mode, foreign keys), DDL schemas, and seed execution.
+
+3. **Persistence Tier (Relational Storage)**:
+   - Powered by **SQLite** using the high-performance `better-sqlite3` driver.
+   - Enforces relational integrity via strict `FOREIGN KEY (ON DELETE RESTRICT / CASCADE)` declarations and `CHECK` constraints (e.g. valid statuses, non-negative amounts, date format validations).
+   - Indices placed on frequently searched and filtered columns (`unit_number`, `status`, `priority`, `month`, `contractor_id`).
+
+4. **Static Asset Delivery in Production**:
+   - The Express application is configured to serve the production client bundle (`client/dist`) as static assets, with an SPA fallback routing middleware. This allows the entire platform to run as a unified service on a single port (e.g., on Render, Railway, or VPS).
+
+---
+
+## Where does each piece run?
+
+- **Browser**: React SPA runtime, local token storage (`localStorage`), SVG chart rendering, responsive UI layout.
+- **Backend Host (Node.js Process)**: Express application server, middleware authorization pipelines, business rule state machine, CSV generation pipeline, and SQLite database engine running on the local filesystem.
+- **Deployment Topology**:
+  - In unified hosting (Render / Railway / Container): The Node process hosts both the REST API and the compiled static React SPA bundle, connecting to a local persistent SQLite file.
+  - In split hosting (Vercel + Render + Supabase): The React frontend deploys to Vercel edge CDN, the Express API deploys to Render web service, and the relational persistence points to managed PostgreSQL with Prisma/Drizzle connection string.
+
+---
+
+## What is the request path for one representative user action, end to end?
+
+### Representative Action: Transitioning a Maintenance Request from *Triaged* to *Scheduled*
+
+1. **User Action (Browser)**:
+   - A property manager views Maintenance Request #3 in the UI.
+   - They select contractor "Dave Miller" from the dropdown and click "Assign".
+   - They then click the action button: **"Schedule Work"**.
+
+2. **Network Request**:
+   - The browser dispatches:
+     ```http
+     PATCH /api/maintenance/3/status HTTP/1.1
+     Host: localhost:4000
+     Authorization: Bearer <jwt_token>
+     Content-Type: application/json
+
+     {
+       "status": "Scheduled",
+       "notes": "Coordinated with tenant for Tuesday 10am"
+     }
+     ```
+
+3. **Middleware Verification (`server/src/middleware/auth.ts`)**:
+   - `requireAuth` extracts the bearer token, verifies the cryptographic signature with `config.jwtSecret`, extracts `{ userId: 1, role: 'property_manager' }`, and attaches it to `req.user`.
+
+4. **Controller Routing (`server/src/controllers/maintenance.controller.ts`)**:
+   - `MaintenanceController.updateStatus` parses request ID `3`, checks that target status `'Scheduled'` is provided, and invokes `MaintenanceService.updateStatus(3, 'Scheduled', 1, 'property_manager', notes)`.
+
+5. **Domain State Machine Validation (`server/src/services/maintenance.service.ts`)**:
+   - `MaintenanceService` retrieves Request #3 from SQLite.
+   - Validates that current status is `'Triaged'`.
+   - **Enforces Requirement 4 & 5 Rule**: Queries `SELECT COUNT(*) FROM maintenance_contractors WHERE request_id = 3`.
+     - *If 0 contractors assigned*: Throws HTTP 422: `"Illegal transition: Cannot move into 'Scheduled' status without an assigned contractor."`
+     - *Since Dave Miller is assigned (count = 1)*: Passes validation.
+
+6. **Database Mutation & Append-Only Audit Logging (`better-sqlite3`)**:
+   - Executes `UPDATE maintenance_requests SET status = 'Scheduled', updated_at = datetime('now') WHERE id = 3`.
+   - Invokes `TimelineService.logEvent(3, 'status_change', 'Triaged', 'Scheduled', 1, notes)`.
+   - Inserts immutable audit row into `maintenance_timeline`:
+     ```sql
+     INSERT INTO maintenance_timeline (request_id, event_type, old_value, new_value, user_id, notes)
+     VALUES (3, 'status_change', 'Triaged', 'Scheduled', 1, 'Coordinated with tenant for Tuesday 10am');
+     ```
+
+7. **HTTP Response & Client Reactivity**:
+   - Server responds with HTTP 200 and the updated request object:
+     ```json
+     {
+       "request": { "id": 3, "status": "Scheduled", ... },
+       "message": "Request status transitioned to \"Scheduled\"."
+     }
+     ```
+   - Client updates the status badge to `Scheduled` (cyan badge), refreshes the immutable audit timeline displaying the new event with timestamp and author, updates dashboard counters, and displays a success toast notification.
+
+---
+
+## What did you decide *not* to build, and why?
+
+1. **Client-Side Data Filtering & Sorting**:
+   - *Decision*: We deliberately did not load all requests into the browser to filter in memory.
+   - *Reason*: Requirement 6 explicitly mandates: *"All of this must happen on the server — do not load every request into the browser and filter there."* Client-side filtering breaks at scale when thousands of requests accumulate. All search terms, unit filters, status filters, priority filters, sorting, and pagination are executed via SQL `WHERE`, `ORDER BY`, `LIMIT`, and `OFFSET`.
+
+2. **Automatic Realtime WebSocket Connections**:
+   - *Decision*: We chose RESTful polling (with 15-second background alert badge sync) rather than a full WebSocket infrastructure.
+   - *Reason*: For a property portfolio of dozens of units, persistent bi-directional WebSockets introduce unnecessary operational complexity, connection teardown edge cases on mobile sleep, and horizontal scaling state issues on serverless or sleeping free-tier hosts. Clean REST endpoints with stale-while-revalidate caching provide rock-solid reliability with zero socket reconnection overhead.
+
+3. **Mutable Audit Trail (Soft Edits / Deletes)**:
+   - *Decision*: We rejected adding any update or delete endpoints to the `maintenance_timeline` table.
+   - *Reason*: Requirement 9 strictly requires: *"Nothing in this timeline can be edited or deleted after the fact, including by property managers."* Any `PUT`, `PATCH`, or `DELETE` request sent to `/api/maintenance/:id/timeline` is immediately rejected with `405 Method Not Allowed`. Audit integrity must be guaranteed by system design.
+
+4. **Complex Third-Party UI Component Libraries (e.g. MUI, Tailwind, AntD)**:
+   - *Decision*: Built with pure, modern Vanilla CSS design tokens.
+   - *Reason*: Avoids dependency bloat, eliminates CSS-in-JS runtime overhead, ensures rapid initial page load, and provides total control over visual aesthetics and responsiveness.
