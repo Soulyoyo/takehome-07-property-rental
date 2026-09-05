@@ -115,148 +115,34 @@ Because we stayed focused on the 10 core requirements and avoided premature rabb
 
 ---
 
-## Data Flow Diagram (DFD) — Simple & Layman-Friendly
+## Data Flow Diagram (DFD) — Visual Diagram
 
-This diagram explains how the system works in plain English without technical jargon. It shows how **real people**, **daily tasks**, and **record books** connect together.
+Below is the simple, high-level Data Flow Diagram showing how **people**, **daily activities**, and **records** connect together in the property rental and maintenance system.
+
+![Property Rental & Maintenance System — Simple Data Flow Diagram](data-flow-diagram.png)
 
 ---
 
 ### How the System Works in 3 Simple Steps:
 
 #### 1. The Two People Who Use the System (Actors)
-- **👤 Property Manager**: Oversees all buildings, collects rent, assigns repair jobs to contractors, and looks at revenue reports.
-- **🔧 Maintenance Contractor**: Plumbers or electricians who only see the specific repair jobs assigned to them, do the work, and mark jobs as fixed.
+- **👤 Property Manager**: Oversees all buildings, collects rent, assigns repair jobs to contractors, and reviews live revenue and performance charts.
+- **🔧 Maintenance Contractor / Worker**: Plumbers, electricians, and specialists who only see their assigned work orders, schedule repairs, enter repair notes, and mark jobs fixed.
 
 #### 2. The 4 Daily Activities (Processes)
-1. **Apartments & Tenants (Process 1)**: Adding new apartments, setting rent prices, entering tenant contact info, and archiving old units.
+1. **Apartments & Tenants (Process 1)**: Adding new apartments, updating monthly rent, entering tenant contact info, and archiving old units.
 2. **Rent Collection & Overdue Alerts (Process 2)**: Recording rent checks as they come in, alerting the manager if rent is late past the grace period, and exporting rent roll spreadsheets.
-3. **Repairs & Work Orders (Process 3)**: Tracking broken items from first report, assigning a contractor, scheduling the date, and marking them resolved.
-4. **Executive Overview (Process 4)**: A visual summary screen showing total cash collected, how many repairs were completed, and weekly performance charts.
+3. **Repairs & Work Orders (Process 3)**: Tracking broken items from initial tenant report, assigning a contractor, scheduling the repair date, and recording completion notes.
+4. **Executive Overview (Process 4)**: A real-time visual summary screen showing total monthly rent collected, active units count, and 8-week weekly repair trend charts.
 
-#### 3. Where Everything is Saved (Filing Cabinets / Data Stores)
-- **📁 Apartments & Tenants List**: Stores apartment numbers, addresses, tenant names, and monthly rent.
-- **💰 Rent Payment Records**: Stores every dollar paid, payment dates, and the month it covers.
-- **📋 Repair Tickets & Audit Log**: Stores every broken item, assigned plumbers/electricians, and notes on how it was fixed.
+#### 3. Where Everything is Saved (Filing Cabinets / Records)
+- **📁 Apartments & Tenants List**: Stores apartment numbers, addresses, tenant names, monthly rent, and grace period settings.
+- **💰 Rent Payment Records**: Stores every dollar paid, payment dates, coverage month, and payment method (permanent financial ledger).
+- **📋 Repair Tickets & Audit Log**: Stores every reported issue, assigned specialist, date history, and resolution notes (compliance & maintenance audit log).
 
 ---
 
-### How to View This Diagram in Draw.io (diagrams.net):
-
-1. Go to **[draw.io](https://app.diagrams.net/)** in your browser.
-2. Click **File -> Open From -> Device...** and choose [`docs/data-flow-diagram.drawio.xml`](data-flow-diagram.drawio.xml).  
-   *(Or go to **Arrange -> Insert -> Advanced -> XML...**, paste the code below, and click **Insert**)*.
-
-<details>
-<summary><b>Click to expand Draw.io XML Code (Easy to Copy)</b></summary>
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net" modified="2026-09-05T09:25:00.000Z" agent="Antigravity" version="24.0.0" type="device">
-  <diagram id="simple-property-dfd" name="Simple Plain-English Data Flow Diagram">
-    <mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="650" background="#ffffff" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-        <mxCell id="2" value="Property Rental &amp;amp; Maintenance System — Simple Data Flow Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="150" y="20" width="900" height="35" as="geometry" />
-        </mxCell>
-        <mxCell id="3" value="A clear, layman-friendly view of how people, daily tasks, and records connect together" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontColor=#64748b;" vertex="1" parent="1">
-          <mxGeometry x="200" y="55" width="800" height="25" as="geometry" />
-        </mxCell>
-        <mxCell id="4" value="👤 Property Manager
-(Manages buildings, collects rent,
-and hires contractors)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#1e3a8a;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="110" width="240" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="5" value="🔧 Maintenance Contractor
-(Plumber / Electrician fixing
-assigned repair jobs)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#581c87;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="920" y="110" width="240" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="6" value="1. Apartments &amp;amp; Tenants
-(Add/edit units, monthly rent,
-and tenant details)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#14532d;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="340" y="110" width="210" height="85" as="geometry" />
-        </mxCell>
-        <mxCell id="7" value="2. Rent &amp;amp; Overdue Alerts
-(Record rent checks, find who is
-late, and download spreadsheets)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#78350f;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="310" width="240" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="8" value="3. Repairs &amp;amp; Work Orders
-(Track issues: Reported -&amp;gt;
-Scheduled with contractor -&amp;gt; Fixed)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#7c2d12;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="620" y="250" width="250" height="95" as="geometry" />
-        </mxCell>
-        <mxCell id="9" value="4. Executive Overview
-(Total rent collected, overdue counts,
-and 8-week repair trend charts)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#0369a1;align=center;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="920" y="310" width="240" height="90" as="geometry" />
-        </mxCell>
-        <mxCell id="10" value="📁 Apartments &amp;amp; Tenants List
-(Apartment #, tenant name,
-monthly rent, grace period)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="340" y="480" width="230" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="11" value="💰 Rent Payment Records
-(Payment date, amount paid,
-and coverage month)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="480" width="240" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="12" value="📋 Repair Tickets &amp;amp; Audit Log
-(Issue description, assigned contractor,
-status history, and notes)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="620" y="480" width="250" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="13" value="Add or edit apartments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="6">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="14" value="Record rent payments received" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="15" value="See overdue rent alerts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="7" target="4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="16" value="Log repair &amp;amp; pick contractor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="8">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="17" value="View charts &amp;amp; money collected" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="9" target="4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="18" value="View assigned repair jobs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="8" target="5">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="19" value="Mark job fixed &amp;amp; add work notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="5" target="8">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="20" value="Save / update apartment list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="6" target="10">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="21" value="Lookup rent amounts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="22" value="Save rent payments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="7" target="11">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="23" value="Save repair status &amp;amp; notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="8" target="12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="24" value="Check building address" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="8">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="25" value="Sum payments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="11" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="26" value="Count repairs completed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="12" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="27" value="Total active units" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
-```
-
-</details>
+### Diagram Downloads & Editable Formats:
+- 🖼️ **High-Resolution PNG Image**: [`docs/data-flow-diagram.png`](data-flow-diagram.png)
+- 📐 **Vector SVG Format**: [`docs/data-flow-diagram.svg`](data-flow-diagram.svg)
+- ✏️ **Editable Draw.io XML**: [`docs/data-flow-diagram.drawio.xml`](data-flow-diagram.drawio.xml) *(open and edit anytime directly on [draw.io](https://app.diagrams.net/))*
