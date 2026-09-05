@@ -14,27 +14,47 @@ The project was structured into logical 2-hour milestones across a planned devel
   - User authentication with JWT and bcrypt password hashing.
   - Server-side RBAC middleware (`property_manager` vs `contractor`).
   - Unit entity CRUD, soft archival/restoration, and grace period modeling.
+  - *Session Visual Deliverables:*
+    ![Login Screen & Fast Role Switcher](screenshots/login_window.png)
+    ![Rental Units Portfolio Table](screenshots/rental_units.png)
+    ![Unit Inspection Modal & Associated Maintenance History](screenshots/rental_unit_window.png)
+    ![Edit Unit Modal - Rent, Tenant & Grace Period](screenshots/rental_unit_window_edit.png)
 
 - **Session 3 (Maintenance Request Engine & Audit Timeline)**:
   - Maintenance request lifecycle state machine (`Reported` -> `Triaged` -> `Scheduled` -> `Resolved`).
   - Strict transition rules (contractor requirement for scheduling, reopen targeting `Triaged`).
   - Multi-contractor assignment join table and role-scoped query visibility.
   - Strictly append-only immutable timeline and note recording.
+  - *Session Visual Deliverables:*
+    ![Scheduled State Modal - Contractor Assignment & Audit Timeline](screenshots/maintenance_plumber_scheduled_window.png)
+    ![Resolved State Modal - State Machine Reopen Logic](screenshots/maintenance_plumber_resolved_window.png)
+    ![Contractor Resolution Modal - Notes & Timeline Verification](screenshots/maintenance_electrician_resolved_window.png)
 
 - **Session 4 (Search, Bulk Rent Reconciliation & Rent Roll Export)**:
   - Server-side query builder for text search, multi-field filtering, sorting, and pagination.
   - Bulk rent processing engine with four-tier classification (`matched`, `underpaid`, `overpaid`, `unmatched`).
   - Rent roll ledger calculation and RFC 4180 CSV export endpoint.
+  - *Session Visual Deliverables:*
+    ![Maintenance Desk & Server-Side Query Engine](screenshots/maintenance_desk.jpg)
+    ![Contractor View - Dave Miller (Plumbing Pros)](screenshots/maintenance_plumber.png)
+    ![Contractor View - Sarah Chen (Sparky Electric)](screenshots/maintenance_electrician.png)
+    ![Bulk Rent Reconciliation & Match Classifier](screenshots/rent_ledger.png)
 
 - **Session 5 (Alerts, Executive Dashboard & Test Suite)**:
   - Overdue rent alert engine with grace period tracking and month-specific recurrence.
   - Executive dashboard metrics (4 headline stats, 2 breakdowns, 8-week resolved chart data).
   - Automated integration test suite covering all 10 requirements and edge cases.
+  - *Session Visual Deliverables:*
+    ![Current Rent Roll Ledger & Payment Status](screenshots/rent_ledger_current_rent.png)
+    ![Rent Roll Table & CSV Export Action](screenshots/rent_ledger_current_rent_.png)
 
 - **Session 6 (Frontend UI/UX & Production Readiness)**:
   - React 18 + Vite SPA implementation with bespoke Vanilla CSS design system.
   - Responsive views: Executive Dashboard, Units Portfolio, Maintenance Desk, Rent Ledger, and Alerts.
   - Single-server production bundle integration and comprehensive documentation.
+  - *Session Visual Deliverables:*
+    ![Executive Dashboard Overview](screenshots/dashboard.jpg)
+    ![Dashboard Real-Time Metrics & Resolution Trend](screenshots/dashboard_window.png)
 
 ---
 

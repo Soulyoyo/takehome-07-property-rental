@@ -12,7 +12,22 @@ Fill this in and commit it. This is the first file we open.
 - **Quick 1-Click Role Switcher**: When logged into the application, a role-switcher bar is visible in the top navigation allowing you to instantly toggle between **Alex Sterling (Property Manager)**, **Dave Miller (Contractor - Plumbing)**, and **Sarah Chen (Contractor - Electrical)** to immediately test server-enforced RBAC and view restrictions without repeatedly logging out and typing credentials.
 - **Unified Single-Port Deployment**: The Express server is architected to serve both the JSON REST API (`/api/*`) and the compiled production React SPA bundle (`client/dist`) from the same process on port 4000. It can be started with `npm run build && npm start`.
 - **Free Tier Host Sleep Notice**: If deployed to free-tier container hosting (e.g. Render), instances may spin down when idle. The first incoming request can take 30–50 seconds to boot the container; subsequent requests respond in under 20ms.
-- **Visual Walkthrough & Interface Snapshots**: Full interface screenshots demonstrating all core workflows (Executive Dashboard, Units Portfolio, Lifecycle State Machine, Contractor-scoped views, and Bulk Rent Reconciliation) are documented in [`README.md`](README.md#application-interface-snapshots) and saved in [`docs/screenshots/`](docs/screenshots/).
+- **Visual Walkthrough & Interface Snapshots**: 15 production interface screenshots demonstrating all core workflows are saved in [`docs/screenshots/`](docs/screenshots/) and indexed below:
+  1. [`login_window.png`](docs/screenshots/login_window.png) — Authentication modal & 1-click demo role switcher (Goal 1)
+  2. [`dashboard.jpg`](docs/screenshots/dashboard.jpg) — Executive dashboard with 4 KPIs, distributions, and 8-week trend chart (Goal 8)
+  3. [`dashboard_window.png`](docs/screenshots/dashboard_window.png) — Dashboard real-time counters & interactive SVG resolution curve (Goal 8)
+  4. [`rental_units.png`](docs/screenshots/rental_units.png) — Rental units portfolio table with monthly rent, grace periods, and status (Goal 2)
+  5. [`rental_unit_window.png`](docs/screenshots/rental_unit_window.png) — Unit inspection modal with tenant contact & unit maintenance history (Goals 2 & 3)
+  6. [`rental_unit_window_edit.png`](docs/screenshots/rental_unit_window_edit.png) — Edit unit modal for rent, tenant info, and grace period days (Goal 2)
+  7. [`maintenance_desk.jpg`](docs/screenshots/maintenance_desk.jpg) — Central maintenance desk with server-side search, filter, sort, and pagination (Goal 6)
+  8. [`maintenance_plumber_scheduled_window.png`](docs/screenshots/maintenance_plumber_scheduled_window.png) — Scheduled state modal with contractor guard & immutable timeline (Goals 4, 5, 9)
+  9. [`maintenance_plumber_resolved_window.png`](docs/screenshots/maintenance_plumber_resolved_window.png) — Resolved state modal with state machine reopen returning strictly to Triaged (Goal 4)
+  10. [`maintenance_electrician_resolved_window.png`](docs/screenshots/maintenance_electrician_resolved_window.png) — Contractor work order resolution modal with immutable notes (Goals 4 & 9)
+  11. [`maintenance_plumber.png`](docs/screenshots/maintenance_plumber.png) — Contractor scoped view for Dave Miller (Plumbing Pros) (Goals 1 & 5)
+  12. [`maintenance_electrician.png`](docs/screenshots/maintenance_electrician.png) — Contractor scoped view for Sarah Chen (Sparky Electric) (Goals 1 & 5)
+  13. [`rent_ledger.png`](docs/screenshots/rent_ledger.png) — Bulk rent reconciliation with 4-tier match reporting (Goal 7)
+  14. [`rent_ledger_current_rent.png`](docs/screenshots/rent_ledger_current_rent.png) — Current rent roll ledger & overdue rent tracking (Goals 7 & 10)
+  15. [`rent_ledger_current_rent_.png`](docs/screenshots/rent_ledger_current_rent_.png) — Rent roll data table & RFC 4180 CSV export download (Goal 7)
 
 ## Demo credentials
 

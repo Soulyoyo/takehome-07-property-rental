@@ -129,3 +129,30 @@ const now = new Date();
 const daysAgo = (weeksAgo: number) => new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000).toISOString();
 ```
 This guarantees that regardless of when a reviewer boots the application, the rolling 8-week trend chart always displays rich, populated historical activity.
+
+---
+
+## 7. Frontend UI/UX Design System & Role-Adaptive Interface
+
+### Prompt
+> "Build a responsive, modern React 18 SPA interface in TypeScript with a custom Vanilla CSS design system:
+> - Global theme tokens (dark/light surfaces, typography, semantic status badges).
+> - 1-click demo role-switcher in the navigation bar to toggle between Property Manager and Contractors.
+> - Executive dashboard with 4 KPI summary cards and an interactive SVG 8-week resolution trend chart.
+> - Portfolio view for units with grace period indicators, archival toggling, and inspection modals.
+> - Central maintenance desk with server-side search input, dropdown filters, column sorting, and pagination.
+> - Lifecycle modal enforcing state transitions and displaying an immutable audit timeline.
+> - Bulk rent reconciliation batch input with immediate 4-tier match reporting and CSV export."
+
+### What you got
+A fast, lightweight SPA without heavyweight CSS library dependencies, maintaining complete separation of concerns and sub-300kB production bundle size.
+
+### What you corrected
+In the initial maintenance request modal, contractor users could see unit creation buttons and rent details because the modal didn't inspect `user.role`. We added role-scoped guards in both the frontend component and backend endpoints (`requireRole('property_manager')`), ensuring contractors only see their assigned tickets and never access rent data or unit creation.
+
+### Resulting Visual Interface Snapshots
+![Executive Dashboard](screenshots/dashboard.jpg)
+![Maintenance Desk](screenshots/maintenance_desk.jpg)
+![Bulk Rent Ledger](screenshots/rent_ledger.png)
+![Units Portfolio](screenshots/rental_units.png)
+

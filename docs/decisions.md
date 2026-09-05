@@ -18,6 +18,8 @@ Log of the major architectural and design decisions that shaped this codebase.
 - **Chose:** A separate `rent_alert_dismissals` relation with a composite unique constraint on `(unit_id, month)` storing `(unit_id, month, dismissed_by_user_id, dismissed_at)`.
 - **Rejected:** Adding a mutable boolean flag `is_alert_dismissed` or `dismissed_until` column on the `units` table.
 - **Why:** Requirement 10 dictates: *"A property manager can dismiss the alert for that unit. If the unit's rent is still unmatched after the grace period in a later month, the alert returns."* If a boolean flag were used on `units`, dismissing month $M$ would either permanently silence future months, or require a fragile cron job or background worker to reset the flag at midnight on the 1st of every month. With a `(unit_id, month)` relational table, dismissing an alert for `2026-09` only silences the alert for `2026-09`. When `2026-10` arrives past the grace period, no dismissal record exists for `2026-10`, so the alert naturally and deterministically returns without any background cron job.
+- **Visual Evidence:**
+![Current Rent Roll Ledger & Overdue Status Tracking](screenshots/rent_ledger_current_rent.png)
 
 ---
 
@@ -26,6 +28,8 @@ Log of the major architectural and design decisions that shaped this codebase.
 - **Chose:** Implementing dynamic SQL query generation with `WHERE`, `ORDER BY`, `LIMIT`, and `OFFSET` in `MaintenanceService.listRequests()`.
 - **Rejected:** Fetching all maintenance requests to the browser and performing client-side `.filter()`, `.sort()`, and `.slice()` in React state.
 - **Why:** Requirement 6 specifically states: *"All of this must happen on the server — do not load every request into the browser and filter there."* In addition to performance at scale, server-side filtering is an essential security boundary: for contractors, the SQL query strictly enforces `WHERE m.id IN (SELECT request_id FROM maintenance_contractors WHERE contractor_id = ?)`. If filtering were done on the client, unassigned requests would be leaked over the network in the JSON response, violating Requirement 1.
+- **Visual Evidence:**
+![Server-Side Filtering & Maintenance Desk](screenshots/maintenance_desk.jpg)
 
 ---
 
@@ -34,6 +38,9 @@ Log of the major architectural and design decisions that shaped this codebase.
 - **Chose:** A dedicated `maintenance_timeline` table that only supports `INSERT` operations, rejecting any HTTP `PUT`, `PATCH`, or `DELETE` requests with `405 Method Not Allowed`.
 - **Rejected:** Storing notes in a mutable array, or allowing property managers to edit past comments and lifecycle changes.
 - **Why:** Requirement 9 requires: *"Nothing in this timeline can be edited or deleted after the fact, including by property managers."* In property management and legal tenant disputes, the integrity of the audit log is critical. We ensure that every event—whether ticket creation, status change, contractor assignment, contractor unassignment, or discussion note—is permanently preserved with the actor's user ID, timestamp, and old/new values.
+- **Visual Evidence:**
+![Append-Only Audit Timeline & Status Machine Modal](screenshots/maintenance_plumber_scheduled_window.png)
+![Reopen Transition Strictly Returning to Triaged](screenshots/maintenance_plumber_resolved_window.png)
 
 ---
 
@@ -58,3 +65,6 @@ Log of the major architectural and design decisions that shaped this codebase.
 - **Chose:** A custom-crafted Vanilla CSS design system using CSS custom properties (`--primary`, `--surface-alt`, `--border-subtle`, `--radius-md`), responsive CSS grids, and accessible dialog modals without external UI component libraries.
 - **Rejected:** Pulling in heavyweight CSS frameworks like Tailwind CSS, Material UI (MUI), or Ant Design.
 - **Why:** Using pure Vanilla CSS keeps the compiled production client bundle under 300 kB (78 kB gzipped), eliminates CSS-in-JS runtime performance penalties, and avoids vendor lock-in or style bloat. It gives 100% control over visual aesthetics—enabling dark mode glassmorphism, responsive data tables, custom SVG charts, and interactive micro-animations while maintaining strict semantic HTML.
+- **Visual Evidence:**
+![Executive Dashboard Overview with Vanilla CSS Design System](screenshots/dashboard.jpg)
+![Real-Time Metrics and SVG Resolution Trend Window](screenshots/dashboard_window.png)

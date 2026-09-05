@@ -64,6 +64,13 @@ flowchart TB
     ClientTier <-->|HTTP JSON REST + JWT Bearer| AuthMid
 ```
 
+### Architectural Interface Snapshots
+
+#### Client Tier Presentation & Executive Analytics
+The frontend delivers high-density dashboards, interactive SVG charts, and seamless role-switching for rapid authentication and testing:
+![Executive Dashboard Overview](screenshots/dashboard.jpg)
+![Login Screen & Fast Role Switcher](screenshots/login_window.png)
+
 ---
 
 ## Synthetic Dataset Generation & Seeding Pipeline
@@ -189,6 +196,17 @@ sequenceDiagram
      }
      ```
    - Client updates the status badge to `Scheduled` (cyan badge), refreshes the immutable audit timeline displaying the new event with timestamp and author, updates dashboard counters, and displays a success toast notification.
+
+#### End-to-End State Machine in the Interface
+The screenshots below demonstrate the central maintenance desk, the enforced contractor guard for the `Scheduled` state, and the reopening rule strictly returning to `Triaged`:
+![Maintenance Desk Central View](screenshots/maintenance_desk.jpg)
+![Scheduled State Transition Modal with Assigned Contractor](screenshots/maintenance_plumber_scheduled_window.png)
+![Resolved State Transition Modal with Reopen Safeguard](screenshots/maintenance_plumber_resolved_window.png)
+
+#### Server-Enforced Contractor Scoping (Goal 1 & 5)
+Contractors only receive maintenance requests specifically assigned to their accounts, with all units, rent data, and assignment management blocked by the server:
+![Contractor View - Dave Miller (Plumbing Pros)](screenshots/maintenance_plumber.png)
+![Contractor View - Sarah Chen (Sparky Electric)](screenshots/maintenance_electrician.png)
 
 ---
 

@@ -137,6 +137,11 @@ Represents individual rental apartments, lofts, and suites.
 | `created_at` | `TEXT` | `NOT NULL DEFAULT (datetime('now'))` | Creation timestamp |
 | `updated_at` | `TEXT` | `NOT NULL DEFAULT (datetime('now'))` | Last modification timestamp |
 
+#### Units Interface & History Visuals
+![Rental Units Portfolio Table](screenshots/rental_units.png)
+![Unit Inspection Modal & Associated Maintenance History](screenshots/rental_unit_window.png)
+![Edit Unit Modal - Rent, Tenant & Grace Period](screenshots/rental_unit_window_edit.png)
+
 ---
 
 ### 3. `rent_payments`
@@ -153,6 +158,11 @@ Individual rent payments recorded against a specific unit and month.
 | `recorded_by_user_id` | `INTEGER` | `NOT NULL REFERENCES users(id)` | Manager who entered the record |
 | `notes` | `TEXT` | `NULL` | Check numbers or reconciliation notes |
 | `created_at` | `TEXT` | `NOT NULL DEFAULT (datetime('now'))` | Insertion timestamp |
+
+#### Rent Ledger & Reconciliation Visuals
+![Bulk Rent Reconciliation & Match Classifier](screenshots/rent_ledger.png)
+![Current Rent Roll Ledger & Payment Status](screenshots/rent_ledger_current_rent.png)
+![Rent Roll Table & CSV Export Action](screenshots/rent_ledger_current_rent_.png)
 
 ---
 
@@ -199,6 +209,10 @@ Strictly append-only audit trail logging every lifecycle event, assignment, and 
 | `user_id` | `INTEGER` | `NOT NULL REFERENCES users(id)` | Author of the action |
 | `notes` | `TEXT` | `NULL` | Explanatory note or contractor work log |
 | `created_at` | `TEXT` | `NOT NULL DEFAULT (datetime('now'))` | Timestamp of event occurrence |
+
+#### Maintenance Relational Structure & Immutable Timeline Visuals
+![Scheduled State Modal - Contractor Assignment & Audit Timeline](screenshots/maintenance_plumber_scheduled_window.png)
+![Contractor Resolution Modal - Notes & Timeline Verification](screenshots/maintenance_electrician_resolved_window.png)
 
 ---
 

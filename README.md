@@ -2,32 +2,43 @@
 
 ## Application Interface Snapshots
 
-### 1. Executive Dashboard (Goal 8)
-*Live headline metrics, status and contractor breakdowns, and 8-week historical resolution trend chart.*
-![Executive Dashboard](docs/screenshots/dashboard.jpg)
+Complete gallery of the 15 production UI snapshots showcasing all 10 required architectural goals:
 
-### 2. Units Portfolio & History (Goal 2 & 3)
-*Complete portfolio view with rent amounts, grace periods, active/archived status, and single-unit maintenance inspection modal.*
-![Rental Units Portfolio](docs/screenshots/rental_units.png)
-![Unit Details & Maintenance History](docs/screenshots/rental_unit_window.png)
+### 1. Authentication & 1-Click Role Switcher (Goal 1)
+*Bcrypt + JWT authentication with pre-configured demo credentials and instant role-switching navigation.*
+![Login Screen & Fast Role Switcher](docs/screenshots/login_window.png)
 
-### 3. Maintenance Desk & Enforced Lifecycle State Machine (Goals 3, 4, 5, 6, 9)
-*Server-side searching/filtering/pagination, contractor assignments, 4-stage lifecycle controls, and append-only immutable audit timeline.*
-![Maintenance Desk](docs/screenshots/maintenance_desk.jpg)
-![Scheduled Ticket Lifecycle Modal](docs/screenshots/maintenance_plumber_scheduled_window.png)
+### 2. Executive Dashboard & Real-Time Analytics (Goal 8)
+*Landing view featuring 4 headline KPIs (Open Requests, Overdue Units, Resolved This Week, Rent Collected), status & contractor distribution breakdowns, and an interactive 8-week historical resolution SVG chart.*
+![Executive Dashboard Overview](docs/screenshots/dashboard.jpg)
+![Dashboard Real-Time Metrics & Resolution Trend](docs/screenshots/dashboard_window.png)
 
-### 4. Contractor Role-Based Access Scoping (Goals 1 & 5)
-*Server-enforced query scoping where contractors can only see and service tickets assigned to their account.*
-![Contractor View - Plumbing](docs/screenshots/maintenance_plumber.png)
-![Contractor View - Electrical](docs/screenshots/maintenance_electrician.png)
+### 3. Units Portfolio, Archival & History (Goals 2 & 3)
+*Complete portfolio management view with monthly rent, tenant contact info, grace period days, active/archived toggling, unit editing modal, and single-unit maintenance history modal.*
+![Rental Units Portfolio Table](docs/screenshots/rental_units.png)
+![Unit Inspection Modal & Associated Maintenance History](docs/screenshots/rental_unit_window.png)
+![Edit Unit Modal - Rent, Tenant & Grace Period](docs/screenshots/rental_unit_window_edit.png)
 
-### 5. Bulk Rent Reconciliation & Rent Roll (Goal 7)
-*Atomic batch bank reconciliation, 4-tier match classification (`matched`, `underpaid`, `overpaid`, `unmatched`), and RFC 4180 CSV export.*
-![Rent Reconciliation & Rent Roll](docs/screenshots/rent_ledger.png)
+### 4. Maintenance Desk & Server-Side Search/Filter Engine (Goal 6)
+*High-performance central maintenance desk featuring SQL-backed server-side text search over descriptions, multi-criteria filtering (unit, status, contractor, priority), multi-column sorting, and pagination.*
+![Maintenance Desk & Server-Side Query Engine](docs/screenshots/maintenance_desk.jpg)
 
-### 6. Authentication & Fast Role Switcher (Goal 1)
-*Bcrypt + JWT authentication with demo presets.*
-![Login Screen](docs/screenshots/login_window.png)
+### 5. Enforced Lifecycle State Machine & Immutable Audit Timeline (Goals 3, 4, 5, 9)
+*Strict 4-stage state machine (`Reported` -> `Triaged` -> `Scheduled` -> `Resolved`) enforcing contractor assignment prior to scheduling, reopen logic strictly returning to `Triaged`, and an append-only timeline rejecting any edits or deletes (HTTP 405).*
+![Scheduled State Modal - Contractor Assignment & Audit Timeline](docs/screenshots/maintenance_plumber_scheduled_window.png)
+![Resolved State Modal - State Machine Reopen Logic](docs/screenshots/maintenance_plumber_resolved_window.png)
+![Contractor Resolution Modal - Notes & Timeline Verification](docs/screenshots/maintenance_electrician_resolved_window.png)
+
+### 6. Contractor Role-Based Access Scoping (Goals 1 & 5)
+*Server-enforced query isolation where maintenance contractors only see and service work orders assigned to them, with financial records, rent rolls, and unit management completely restricted on the backend.*
+![Contractor View - Dave Miller (Plumbing Pros)](docs/screenshots/maintenance_plumber.png)
+![Contractor View - Sarah Chen (Sparky Electric)](docs/screenshots/maintenance_electrician.png)
+
+### 7. Bulk Rent Reconciliation, Rent Roll & CSV Export (Goals 7 & 10)
+*Atomic batch payment recording with instant 4-tier match classification (`matched`, `underpaid`, `overpaid`, `unmatched`), comprehensive portfolio rent roll ledger, grace-period overdue recurrence tracking, and RFC 4180 CSV export.*
+![Bulk Rent Reconciliation & Match Classifier](docs/screenshots/rent_ledger.png)
+![Current Rent Roll Ledger & Payment Status](docs/screenshots/rent_ledger_current_rent.png)
+![Rent Roll Table & CSV Export Action](docs/screenshots/rent_ledger_current_rent_.png)
 
 ---
 
