@@ -228,11 +228,11 @@ Because this repository is architected as a **single unified service** (Express 
    - **Name**: `takehome-07-property-rental` (or your preferred name)
    - **Runtime**: `Node`
    - **Branch**: `main`
-   - **Build Command**: `npm install --include=dev && npm run build`
+   - **Build Command**: `npm run build`
    - **Start Command**: `npm start`
    - **Instance Type**: `Free`
 5. Click **Deploy Web Service**.
-6. Render will automatically build the client bundle, compile the TypeScript server, launch the unified service, seed the synthetic dataset, and assign you a free public HTTPS URL (e.g. `https://takehome-07-property-rental.onrender.com`).
+6. Render will compile the TypeScript server in seconds, launch the unified service, seed the synthetic dataset, and assign you a free public HTTPS URL (e.g. `https://takehome-07-property-rental.onrender.com`).
 7. Paste this URL into [`SUBMISSION.md`](SUBMISSION.md) under `## Links -> Live application:`.
 
 ## How to submit
