@@ -228,7 +228,7 @@ Because this repository is architected as a **single unified service** (Express 
    - **Name**: `takehome-07-property-rental` (or your preferred name)
    - **Runtime**: `Node`
    - **Branch**: `main`
-   - **Build Command**: `npm run build`
+   - **Build Command**: `npm install --include=dev && npm run build`
    - **Start Command**: `npm start`
    - **Instance Type**: `Free`
 5. Click **Deploy Web Service**.
