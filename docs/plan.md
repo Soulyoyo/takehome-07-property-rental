@@ -7,7 +7,8 @@ The project was structured into logical 2-hour milestones across a planned devel
 - **Session 1 (Architecture & Data Foundation)**:
   - Repository initialization and incremental Git setup.
   - Relational schema modeling: entities, foreign keys, CHECK constraints, and indices.
-  - Database connection layer with SQLite WAL pragmas and comprehensive demo seed dataset.
+  - Database connection layer with SQLite WAL pragmas (`journal_mode = WAL`, `synchronous = NORMAL`, `foreign_keys = ON`).
+  - **Synthetic Dataset Engineering (`server/src/db/seed.ts`)**: Designed and scripted a comprehensive, deterministic synthetic dataset featuring 6 rental units across varied price tiers ($1,250–$2,400), 3 specialized contractor trades (Plumbing, Electrical, Carpentry), multi-month rent payment histories with matched/underpaid/overpaid/unmatched scenarios, multi-contractor ticket co-assignments, and 8 weeks of chronological timeline audit records to support executive trend analysis.
 
 - **Session 2 (Auth, RBAC & Core Units Management)**:
   - User authentication with JWT and bcrypt password hashing.

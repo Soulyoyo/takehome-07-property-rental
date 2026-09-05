@@ -1,5 +1,21 @@
 # Assignment 07 — Property Rental & Maintenance
 
+## Application Interface Snapshots
+
+### 1. Executive Dashboard (Goal 8)
+*Live headline metrics, status and contractor breakdowns, and 8-week historical resolution trend chart.*
+![Executive Dashboard](docs/screenshots/dashboard.jpg)
+
+### 2. Maintenance Desk & Enforced Lifecycle State Machine (Goals 3, 4, 5, 6, 9)
+*Server-side searching/filtering/pagination, contractor assignments, 4-stage lifecycle controls, and append-only immutable audit timeline.*
+![Maintenance Desk](docs/screenshots/maintenance_desk.jpg)
+
+### 3. Bulk Rent Reconciliation & Rent Roll (Goal 7)
+*Atomic batch bank reconciliation, 4-tier match classification (`matched`, `underpaid`, `overpaid`, `unmatched`), and RFC 4180 CSV export.*
+![Rent Reconciliation](docs/screenshots/rent_ledger.jpg)
+
+---
+
 ## The scenario
 
 Picture a small property management company handling a portfolio of a few dozen rental units on

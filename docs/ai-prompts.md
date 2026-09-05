@@ -106,3 +106,26 @@ A 23-test suite covering authentication, RBAC 403 checks, unit archiving, lifecy
 
 ### What you corrected
 In the first test run, tests inside `describe` blocks ran concurrently, causing race conditions where authentication tokens were not yet populated before downstream lifecycle tests ran. We corrected this by authenticating manager and contractor accounts in the `before()` hook and enforcing sequential execution.
+
+---
+
+## 6. Deterministic Synthetic Dataset Generation
+
+### Prompt
+> "Write a TypeScript seed script `server/src/db/seed.ts` that populates a realistic, deterministic synthetic dataset into SQLite:
+> - Users: 1 Property Manager (`manager@apexpm.com`), 3 Contractors with distinct specialties (Plumbing, Electrical, Carpentry).
+> - Units: 6 diverse units with varied rents ($1,250–$2,400), tenant names, differing grace periods (3, 5, 7 days), and 1 soft-archived unit.
+> - Rent Payments: Multi-month ledger entries creating matched, underpaid, overpaid, and delinquent scenarios.
+> - Maintenance Requests: Tickets spanning all 4 stages (Reported, Triaged, Scheduled, Resolved) with single and multi-contractor assignments.
+> - Immutable Timeline: 8 weeks of chronological `status_change` and `note` events distributed across 7-day rolling buckets to validate the executive resolution chart."
+
+### What you got
+A comprehensive seeding script using `better-sqlite3` prepared statements that cleanly clears and re-populates all tables.
+
+### What you corrected
+The initial draft hardcoded static calendar dates (e.g. `'2023-10-15'`) for the 8-week timeline events. When the executive dashboard queried `datetime('now', '-7 days')`, those hardcoded dates fell outside the rolling 8-week window, rendering empty bars on the chart. We corrected this to compute dynamic relative dates:
+```typescript
+const now = new Date();
+const daysAgo = (weeksAgo: number) => new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000).toISOString();
+```
+This guarantees that regardless of when a reviewer boots the application, the rolling 8-week trend chart always displays rich, populated historical activity.

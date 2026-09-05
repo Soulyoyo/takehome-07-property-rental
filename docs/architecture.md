@@ -27,6 +27,68 @@ The system is structured as a decoupled, multi-tiered web application designed f
 4. **Static Asset Delivery in Production**:
    - The Express application is configured to serve the production client bundle (`client/dist`) as static assets, with an SPA fallback routing middleware. This allows the entire platform to run as a unified service on a single port (e.g., on Render, Railway, or VPS).
 
+### System Architecture Diagram
+
+```mermaid
+flowchart TB
+    subgraph ClientTier ["Client Tier (Browser SPA - React 18 & TypeScript)"]
+        UI["Vanilla CSS Design System\n(Theme Tokens, Modals, Responsive Grids)"]
+        State["React Context & State\n(AuthContext, ToastContext, Active Filters)"]
+        Views["Role-Adaptive Views\n(Dashboard, Units, Maintenance, Rent, Alerts)"]
+        UI --- State --- Views
+    end
+
+    subgraph ServerTier ["Server Tier (Node.js & Express 5)"]
+        AuthMid["Security Middleware\n(requireAuth, requireRole)"]
+        Routers["REST Route Handlers\n(/auth, /units, /maintenance, /rent, /alerts, /dashboard)"]
+        
+        subgraph DomainServices ["Domain Services (Business Logic)"]
+            MaintService["MaintenanceService\n(4-Stage State Machine, Query Engine)"]
+            RentService["RentService\n(Bulk 4-Tier Matcher, CSV Exporter)"]
+            AlertService["AlertService\n(Grace Period Engine, Recurrence Logic)"]
+            DashService["DashboardService\n(8-Week Bucket Aggregator)"]
+            TimelineService["TimelineService\n(Append-Only Audit Log Emitter)"]
+        end
+
+        AuthMid --> Routers
+        Routers --> DomainServices
+    end
+
+    subgraph PersistenceTier ["Persistence Tier (SQLite via better-sqlite3)"]
+        DB[(property_rental.db\nPRAGMA WAL Mode & Foreign Keys)]
+        SeedScript["Deterministic Synthetic Dataset\n(seed.ts: 6 Units, 3 Contractors, 8-Week History)"]
+        SeedScript -.->|Bootstrap / Reset| DB
+        DomainServices <--> DB
+    end
+
+    ClientTier <-->|HTTP JSON REST + JWT Bearer| AuthMid
+```
+
+---
+
+## Synthetic Dataset Generation & Seeding Pipeline
+
+To ensure that the application's complex business rules (e.g. grace-period overdue recurrence, multi-contractor assignment, 8-week historical resolution metrics, and bulk rent match classifications) could be validated with full real-world fidelity, we implemented a dedicated, deterministic synthetic data generator in [`server/src/db/seed.ts`](file:///c:/Users/Soulyoyo/OneDrive/Documents/takehome-07-property-rental/takehome-07-property-rental/server/src/db/seed.ts):
+
+1. **Deterministic User Archetypes**:
+   - 1 Property Manager account (`manager@apexpm.com`) with full portfolio administrative credentials.
+   - 3 Specialized Contractor accounts with distinct trade scopes (`dave@plumbingpros.com` for Plumbing, `sarah@sparkyelec.com` for Electrical, and `carlos@finishcarpentry.com` for Carpentry) to test trade-scoped filtering and contractor assignment constraints.
+
+2. **Diverse Rental Unit Portfolio**:
+   - 6 distinct units spanning varied rent points ($1,250.00 to $2,400.00/mo), different grace periods (3 to 7 days), active tenants, and 1 archived unit (`Unit 301`) to test soft-archival hiding and restoration.
+
+3. **Multi-Month Financial Ledger Scenarios**:
+   - Historical rent payments across consecutive months modeling:
+     - Full timely payments (`matched`).
+     - Split/partial payments (`underpaid`).
+     - Overpayments with credit balances (`overpaid`).
+     - Delinquent accounts past the grace period to trigger active navigation badges and alerts.
+
+4. **Multi-Stage Maintenance Tickets & 8-Week Chronological Audit Events**:
+   - Tickets populated across every stage of the lifecycle state machine (`Reported`, `Triaged`, `Scheduled`, `Resolved`).
+   - Single-contractor and multi-contractor assignments (e.g., plumbing + carpentry co-assigned to emergency water leak damage).
+   - 8 weeks of historical `status_change` timeline records distributed across rolling 7-day intervals to generate a realistic resolution trend chart on the executive dashboard.
+
 ---
 
 ## Where does each piece run?
@@ -42,6 +104,40 @@ The system is structured as a decoupled, multi-tiered web application designed f
 ## What is the request path for one representative user action, end to end?
 
 ### Representative Action: Transitioning a Maintenance Request from *Triaged* to *Scheduled*
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor PM as Property Manager
+    participant UI as React Client (SPA)
+    participant Auth as Auth Middleware (JWT)
+    participant Controller as MaintenanceController
+    participant Service as MaintenanceService
+    participant DB as SQLite (better-sqlite3)
+
+    PM->>UI: Selects "Dave Miller" & Clicks "Schedule Work"
+    UI->>Auth: PATCH /api/maintenance/3/status { status: "Scheduled", notes: "..." }
+    Auth->>Auth: Verify JWT & extract { userId: 1, role: 'property_manager' }
+    Auth->>Controller: updateStatus(req, res)
+    Controller->>Service: updateStatus(id: 3, newStatus: 'Scheduled', userId: 1, role: 'property_manager')
+    
+    Service->>DB: SELECT * FROM maintenance_requests WHERE id = 3
+    DB-->>Service: Returns Request (current: 'Triaged')
+    
+    rect rgb(20, 30, 45)
+        Note over Service,DB: State Machine Contractor Enforcement (Goal 4)
+        Service->>DB: SELECT COUNT(*) FROM maintenance_contractors WHERE request_id = 3
+        DB-->>Service: count: 1 (Contractor assigned)
+    end
+
+    Service->>DB: UPDATE maintenance_requests SET status = 'Scheduled'
+    Service->>DB: INSERT INTO maintenance_timeline (event_type: 'status_change', old: 'Triaged', new: 'Scheduled')
+    DB-->>Service: Mutation & Append-Only Log Confirmed
+    
+    Service-->>Controller: Updated Request Object & Timeline
+    Controller-->>UI: HTTP 200 { request: {...}, message: "..." }
+    UI->>PM: Updates badge to "Scheduled", appends timeline entry, shows success toast
+```
 
 1. **User Action (Browser)**:
    - A property manager views Maintenance Request #3 in the UI.

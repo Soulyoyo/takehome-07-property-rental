@@ -42,3 +42,19 @@ Log of the major architectural and design decisions that shaped this codebase.
 - **Chose:** Express configured to host the REST API under `/api/*` and serve the compiled static production SPA bundle from `client/dist` on root `/` with SPA HTML fallback.
 - **Rejected:** Forcing split hosting where the frontend must run on Vercel and the backend on Render as separate origins.
 - **Why:** While the client can be deployed separately if desired, supporting unified single-port hosting allows the entire application to be run locally with `npm start` or deployed to any cloud container or virtual machine with a single URL. This completely eliminates CORS preflight overhead, simplifies SSL certificate management, avoids cross-origin cookie restrictions, and prevents cold-start discrepancies where one service wakes up before the other.
+
+---
+
+## Decision 6: Automated Deterministic Synthetic Dataset Generation vs Manual / Ad-hoc Seeding
+
+- **Chose:** Building an automated, deterministic synthetic dataset generator in [`server/src/db/seed.ts`](file:///c:/Users/Soulyoyo/OneDrive/Documents/takehome-07-property-rental/takehome-07-property-rental/server/src/db/seed.ts) that executes on clean database boots and initializes 6 rental units, 3 contractor trades, multi-month payment histories, and 8 weeks of chronological timeline audit entries.
+- **Rejected:** Leaving the database blank for manual post-deployment data entry, or using naive 1-row placeholder fixtures.
+- **Why:** The requirements impose stringent historical constraints—such as Goal 8 charting tickets resolved per week over the last eight weeks, Goal 10 verifying that alert dismissals in month $M$ return in month $M+1$, and Goal 7 testing a 4-tier bulk rent matching report (`matched`, `underpaid`, `overpaid`, `unmatched`). Validating these features during development, automated testing, and live reviewer demonstrations requires a rich, mathematically consistent dataset that mirrors an active property management portfolio.
+
+---
+
+## Decision 7: Custom Vanilla CSS Design System vs Heavy Third-Party UI Framework
+
+- **Chose:** A custom-crafted Vanilla CSS design system using CSS custom properties (`--primary`, `--surface-alt`, `--border-subtle`, `--radius-md`), responsive CSS grids, and accessible dialog modals without external UI component libraries.
+- **Rejected:** Pulling in heavyweight CSS frameworks like Tailwind CSS, Material UI (MUI), or Ant Design.
+- **Why:** Using pure Vanilla CSS keeps the compiled production client bundle under 300 kB (78 kB gzipped), eliminates CSS-in-JS runtime performance penalties, and avoids vendor lock-in or style bloat. It gives 100% control over visual aesthetics—enabling dark mode glassmorphism, responsive data tables, custom SVG charts, and interactive micro-animations while maintaining strict semantic HTML.

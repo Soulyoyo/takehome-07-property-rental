@@ -1,4 +1,107 @@
-# Schema
+## Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    users ||--o{ rent_payments : "records"
+    users ||--o{ maintenance_requests : "reports"
+    users ||--o{ maintenance_contractors : "assigned as"
+    users ||--o{ maintenance_timeline : "authors"
+    users ||--o{ rent_alert_dismissals : "dismisses"
+    
+    units ||--o{ rent_payments : "accumulates"
+    units ||--o{ maintenance_requests : "belongs to"
+    units ||--o{ rent_alert_dismissals : "evaluated for"
+    
+    maintenance_requests ||--o{ maintenance_contractors : "assigned to"
+    maintenance_requests ||--o{ maintenance_timeline : "tracks events"
+
+    users {
+        int id PK
+        string email UK
+        string password_hash
+        string name
+        string role "property_manager | contractor"
+        string specialty
+        datetime created_at
+    }
+
+    units {
+        int id PK
+        string unit_number UK
+        string address
+        real monthly_rent
+        string tenant_name
+        string tenant_email
+        string tenant_phone
+        int grace_days
+        int is_archived "0 or 1"
+        datetime created_at
+        datetime updated_at
+    }
+
+    rent_payments {
+        int id PK
+        int unit_id FK
+        real amount
+        string month "YYYY-MM"
+        datetime paid_at
+        string payment_method
+        int recorded_by_user_id FK
+        string notes
+    }
+
+    maintenance_requests {
+        int id PK
+        int unit_id FK
+        string title
+        string description
+        string priority "low | medium | high | urgent"
+        string status "Reported | Triaged | Scheduled | Resolved"
+        int created_by_user_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    maintenance_contractors {
+        int request_id PK,FK
+        int contractor_id PK,FK
+        datetime assigned_at
+        int assigned_by_user_id FK
+    }
+
+    maintenance_timeline {
+        int id PK
+        int request_id FK
+        string event_type "created | status_change | assignment | unassignment | note | details_updated"
+        string old_value
+        string new_value
+        int user_id FK
+        string notes
+        datetime created_at
+    }
+
+    rent_alert_dismissals {
+        int id PK
+        int unit_id UK,FK
+        string month UK "YYYY-MM"
+        int dismissed_by_user_id FK
+        datetime dismissed_at
+    }
+```
+
+---
+
+## Synthetic Dataset Architecture & Generation Strategy
+
+Rather than relying on empty tables or naive, hard-coded placeholder rows, the project implements an automated, deterministic **Synthetic Dataset Generator** in [`server/src/db/seed.ts`](file:///c:/Users/Soulyoyo/OneDrive/Documents/takehome-07-property-rental/takehome-07-property-rental/server/src/db/seed.ts).
+
+### Why Synthetic Data Was Generated:
+1. **Validating 8-Week Historical Time Buckets (Goal 8)**: An empty database cannot test trend aggregation. We generated 8 rolling weekly time intervals of maintenance completion records in `maintenance_timeline` to guarantee the executive dashboard chart renders dynamic trend curves immediately upon cold boot.
+2. **Grace-Period Boundary Verification (Goal 10)**: Generated units with differing grace thresholds (e.g. 3, 5, and 7 days) and distinct payment histories to verify that overdue alerts only fire when `currentDay > grace_days` and that month-specific dismissals don't leak into subsequent months.
+3. **Multi-Contractor Edge Cases (Goal 5)**: Created tickets with 0 contractors, 1 contractor, and multiple co-assigned contractors (e.g. plumbing + carpentry) to test assignment badges, removal permissions, and the scheduling state machine check.
+4. **Bulk Reconciliation Four-Tier Classification (Goal 7)**: Populated active units across diverse unit numbers ("101", "204B", "301", "Penthouse-A") so that sample bank reconciliation batches reliably demonstrate all four report classifications (`matched`, `underpaid`, `overpaid`, and `unmatched`).
+
+---
 
 ## Table by Table: Columns, Types, and Primary Keys
 
