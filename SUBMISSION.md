@@ -12,6 +12,7 @@ Fill this in and commit it. This is the first file we open.
 - **Quick 1-Click Role Switcher**: When logged into the application, a role-switcher bar is visible in the top navigation allowing you to instantly toggle between **Alex Sterling (Property Manager)**, **Dave Miller (Contractor - Plumbing)**, and **Sarah Chen (Contractor - Electrical)** to immediately test server-enforced RBAC and view restrictions without repeatedly logging out and typing credentials.
 - **Unified Single-Port Deployment**: The Express server is architected to serve both the JSON REST API (`/api/*`) and the compiled production React SPA bundle (`client/dist`) from the same process on port 4000. It can be started with `npm run build && npm start`.
 - **Free Tier Host Sleep Notice**: If deployed to free-tier container hosting (e.g. Render), instances may spin down when idle. The first incoming request can take 30–50 seconds to boot the container; subsequent requests respond in under 20ms.
+- **Visual Walkthrough & Interface Snapshots**: Full interface screenshots demonstrating all core workflows (Executive Dashboard, Units Portfolio, Lifecycle State Machine, Contractor-scoped views, and Bulk Rent Reconciliation) are documented in [`README.md`](README.md#application-interface-snapshots) and saved in [`docs/screenshots/`](docs/screenshots/).
 
 ## Demo credentials
 

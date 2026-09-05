@@ -6,13 +6,28 @@
 *Live headline metrics, status and contractor breakdowns, and 8-week historical resolution trend chart.*
 ![Executive Dashboard](docs/screenshots/dashboard.jpg)
 
-### 2. Maintenance Desk & Enforced Lifecycle State Machine (Goals 3, 4, 5, 6, 9)
+### 2. Units Portfolio & History (Goal 2 & 3)
+*Complete portfolio view with rent amounts, grace periods, active/archived status, and single-unit maintenance inspection modal.*
+![Rental Units Portfolio](docs/screenshots/rental_units.png)
+![Unit Details & Maintenance History](docs/screenshots/rental_unit_window.png)
+
+### 3. Maintenance Desk & Enforced Lifecycle State Machine (Goals 3, 4, 5, 6, 9)
 *Server-side searching/filtering/pagination, contractor assignments, 4-stage lifecycle controls, and append-only immutable audit timeline.*
 ![Maintenance Desk](docs/screenshots/maintenance_desk.jpg)
+![Scheduled Ticket Lifecycle Modal](docs/screenshots/maintenance_plumber_scheduled_window.png)
 
-### 3. Bulk Rent Reconciliation & Rent Roll (Goal 7)
+### 4. Contractor Role-Based Access Scoping (Goals 1 & 5)
+*Server-enforced query scoping where contractors can only see and service tickets assigned to their account.*
+![Contractor View - Plumbing](docs/screenshots/maintenance_plumber.png)
+![Contractor View - Electrical](docs/screenshots/maintenance_electrician.png)
+
+### 5. Bulk Rent Reconciliation & Rent Roll (Goal 7)
 *Atomic batch bank reconciliation, 4-tier match classification (`matched`, `underpaid`, `overpaid`, `unmatched`), and RFC 4180 CSV export.*
-![Rent Reconciliation](docs/screenshots/rent_ledger.jpg)
+![Rent Reconciliation & Rent Roll](docs/screenshots/rent_ledger.png)
+
+### 6. Authentication & Fast Role Switcher (Goal 1)
+*Bcrypt + JWT authentication with demo presets.*
+![Login Screen](docs/screenshots/login_window.png)
 
 ---
 
