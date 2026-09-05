@@ -115,274 +115,142 @@ Because we stayed focused on the 10 core requirements and avoided premature rabb
 
 ---
 
-## Data Flow Diagram (DFD) & System Architecture Flow
+## Data Flow Diagram (DFD) — Simple & Layman-Friendly
 
-The end-to-end data lifecycle across all 6 development sessions and 10 core requirements is visualized in a comprehensive **Level 1 & 2 Data Flow Diagram (DFD)**.
-
-### Architectural Data Flow Components:
-1. **External Entities (Actors)**:
-   - **Property Manager** (`Alex Sterling`): Full portfolio administrative control, unit CRUD, bulk rent reconciliation, contractor assignments, alert dismissals, and executive analytics.
-   - **Maintenance Contractor** (`Dave Miller` / `Sarah Chen`): Role-scoped access limited to assigned tickets, lifecycle progression, and immutable work note authoring.
-2. **Processes (P1–P10)**:
-   - **P1: Authentication & RBAC Authorization Gateway** (`JWT` verification & `requireRole` middleware)
-   - **P2: Unit & Lease Management** (CRUD, grace period thresholds, and soft archival hiding)
-   - **P3: Maintenance Lifecycle State Machine** (`Reported` -> `Triaged` -> `Scheduled` -> `Resolved` with contractor validation)
-   - **P4: Multi-Contractor Assignment Engine** (Many-to-many join table, PM-only mutation)
-   - **P5: Server-Side Search, Filter & Pagination Query Engine** (Dynamic SQL `WHERE`, `ORDER BY`, `LIMIT`, and `OFFSET`)
-   - **P6: Bulk Rent Reconciliation & Match Classifier** (Atomic batch transaction with 4-tier match reporting)
-   - **P7: Rent Roll Ledger & RFC 4180 CSV Exporter** (Active unit balances, summary totals, and file downloads)
-   - **P8: Overdue Rent Alerts & Recurrence Engine** (Grace period calculation and month-specific `rent_alert_dismissals`)
-   - **P9: Append-Only Immutable Audit Timeline** (`HTTP 405` on `PUT`/`PATCH`/`DELETE`)
-   - **P10: Executive Dashboard Analytics & Trend Aggregator** (4 headline KPIs, distributions, and rolling 8-week trend buckets)
-3. **Data Stores (D1–D7)**:
-   - `D1: users` (id, email, password_hash, role, specialty)
-   - `D2: units` (id, unit_number, monthly_rent, tenant, grace_days, is_archived)
-   - `D3: maintenance_requests` (id, unit_id, status, priority, title, description)
-   - `D4: maintenance_contractors` (request_id, contractor_id, assigned_by, assigned_at)
-   - `D5: maintenance_timeline` (id, request_id, event_type, old_value, new_value, notes)
-   - `D6: rent_payments` (id, unit_id, amount, month, paid_at, payment_method)
-   - `D7: rent_alert_dismissals` (id, unit_id, month, dismissed_by, dismissed_at)
+This diagram explains how the system works in plain English without technical jargon. It shows how **real people**, **daily tasks**, and **record books** connect together.
 
 ---
 
-### How to Open and Render in Draw.io (diagrams.net)
+### How the System Works in 3 Simple Steps:
 
-1. Open **[draw.io](https://app.diagrams.net/)** (or diagrams.net) in any web browser.
-2. Use either method:
-   - **Option A (Direct File Open)**: Click **File -> Open From -> Device...** and choose [`docs/data-flow-diagram.drawio.xml`](data-flow-diagram.drawio.xml).
-   - **Option B (Paste XML Code)**: In draw.io, click **Arrange -> Insert -> Advanced -> XML...** (or **Extras -> Edit Diagram...**), paste the raw XML block below, and click **Insert / OK**.
+#### 1. The Two People Who Use the System (Actors)
+- **👤 Property Manager**: Oversees all buildings, collects rent, assigns repair jobs to contractors, and looks at revenue reports.
+- **🔧 Maintenance Contractor**: Plumbers or electricians who only see the specific repair jobs assigned to them, do the work, and mark jobs as fixed.
+
+#### 2. The 4 Daily Activities (Processes)
+1. **Apartments & Tenants (Process 1)**: Adding new apartments, setting rent prices, entering tenant contact info, and archiving old units.
+2. **Rent Collection & Overdue Alerts (Process 2)**: Recording rent checks as they come in, alerting the manager if rent is late past the grace period, and exporting rent roll spreadsheets.
+3. **Repairs & Work Orders (Process 3)**: Tracking broken items from first report, assigning a contractor, scheduling the date, and marking them resolved.
+4. **Executive Overview (Process 4)**: A visual summary screen showing total cash collected, how many repairs were completed, and weekly performance charts.
+
+#### 3. Where Everything is Saved (Filing Cabinets / Data Stores)
+- **📁 Apartments & Tenants List**: Stores apartment numbers, addresses, tenant names, and monthly rent.
+- **💰 Rent Payment Records**: Stores every dollar paid, payment dates, and the month it covers.
+- **📋 Repair Tickets & Audit Log**: Stores every broken item, assigned plumbers/electricians, and notes on how it was fixed.
+
+---
+
+### How to View This Diagram in Draw.io (diagrams.net):
+
+1. Go to **[draw.io](https://app.diagrams.net/)** in your browser.
+2. Click **File -> Open From -> Device...** and choose [`docs/data-flow-diagram.drawio.xml`](data-flow-diagram.drawio.xml).  
+   *(Or go to **Arrange -> Insert -> Advanced -> XML...**, paste the code below, and click **Insert**)*.
 
 <details>
-<summary><b>Click to expand full Draw.io XML Code for Data Flow Diagram</b></summary>
+<summary><b>Click to expand Draw.io XML Code (Easy to Copy)</b></summary>
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net" modified="2026-09-05T09:15:00.000Z" agent="Antigravity" version="24.0.0" type="device">
-  <diagram id="property-rental-dfd" name="Apex Property Rental Data Flow Diagram">
-    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="950" background="#ffffff" math="0" shadow="0">
+<mxfile host="app.diagrams.net" modified="2026-09-05T09:25:00.000Z" agent="Antigravity" version="24.0.0" type="device">
+  <diagram id="simple-property-dfd" name="Simple Plain-English Data Flow Diagram">
+    <mxGraphModel dx="1400" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="650" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="2" value="Apex Property Rental &amp; Maintenance System — Data Flow Diagram (DFD Level 1 &amp; 2)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="250" y="20" width="950" height="40" as="geometry" />
+        <mxCell id="2" value="Property Rental &amp;amp; Maintenance System — Simple Data Flow Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="150" y="20" width="900" height="35" as="geometry" />
         </mxCell>
-        <mxCell id="3" value="Complete End-to-End Visual Representation of Requirements, RBAC Boundaries, Lifecycles, and Data Stores" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#64748b;" vertex="1" parent="1">
-          <mxGeometry x="350" y="55" width="750" height="25" as="geometry" />
+        <mxCell id="3" value="A clear, layman-friendly view of how people, daily tasks, and records connect together" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="200" y="55" width="800" height="25" as="geometry" />
         </mxCell>
-        <mxCell id="4" value="Actor: Property Manager
-(Alex Sterling - Full Portfolio)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#1e3a8a;align=center;" vertex="1" parent="1">
-          <mxGeometry x="40" y="100" width="220" height="80" as="geometry" />
+        <mxCell id="4" value="👤 Property Manager
+(Manages buildings, collects rent,
+and hires contractors)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#1e3a8a;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="240" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="5" value="Actor: Contractor
-(Dave Miller / Sarah Chen)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#581c87;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1140" y="100" width="220" height="80" as="geometry" />
+        <mxCell id="5" value="🔧 Maintenance Contractor
+(Plumber / Electrician fixing
+assigned repair jobs)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#581c87;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="110" width="240" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="6" value="P1: Authentication &amp;amp;
-RBAC Authorization
-(JWT &amp;amp; requireRole)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="590" y="100" width="220" height="80" as="geometry" />
+        <mxCell id="6" value="1. Apartments &amp;amp; Tenants
+(Add/edit units, monthly rent,
+and tenant details)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#14532d;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="110" width="210" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="7" value="D1: users
-(id, email, password_hash,
-role, specialty)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="600" y="220" width="200" height="60" as="geometry" />
+        <mxCell id="7" value="2. Rent &amp;amp; Overdue Alerts
+(Record rent checks, find who is
+late, and download spreadsheets)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#78350f;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="240" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="8" value="P2: Unit &amp;amp; Lease
-Management
-(CRUD &amp;amp; Soft Archival)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="40" y="240" width="200" height="75" as="geometry" />
+        <mxCell id="8" value="3. Repairs &amp;amp; Work Orders
+(Track issues: Reported -&amp;gt;
+Scheduled with contractor -&amp;gt; Fixed)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#7c2d12;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="250" width="250" height="95" as="geometry" />
         </mxCell>
-        <mxCell id="9" value="D2: units
-(id, unit_number, monthly_rent,
-tenant, grace_days, is_archived)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="320" y="245" width="210" height="65" as="geometry" />
+        <mxCell id="9" value="4. Executive Overview
+(Total rent collected, overdue counts,
+and 8-week repair trend charts)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#0369a1;align=center;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="310" width="240" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="10" value="P3: Maintenance Lifecycle
-State Machine
-(Reported-&amp;gt;Triaged-&amp;gt;Scheduled-&amp;gt;Resolved)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="690" y="340" width="240" height="85" as="geometry" />
+        <mxCell id="10" value="📁 Apartments &amp;amp; Tenants List
+(Apartment #, tenant name,
+monthly rent, grace period)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="480" width="230" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="11" value="P4: Multi-Contractor
-Assignment Engine
-(PM Only Enforced)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="340" width="210" height="75" as="geometry" />
+        <mxCell id="11" value="💰 Rent Payment Records
+(Payment date, amount paid,
+and coverage month)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="240" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="12" value="D3: maintenance_requests
-(id, unit_id, status, priority,
-title, description)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="690" y="480" width="240" height="65" as="geometry" />
+        <mxCell id="12" value="📋 Repair Tickets &amp;amp; Audit Log
+(Issue description, assigned contractor,
+status history, and notes)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2.5;fontStyle=1;fontSize=13;fontColor=#1e293b;align=center;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="480" width="250" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="13" value="D4: maintenance_contractors
-(request_id, contractor_id,
-assigned_by, assigned_at)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="480" width="210" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="14" value="P9: Append-Only Immutable
-Audit Timeline
-(HTTP 405 on PUT/PATCH/DELETE)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="690" y="600" width="240" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="15" value="D5: maintenance_timeline
-(id, request_id, event_type,
-old_value, new_value, notes)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="690" y="740" width="240" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="16" value="P5: Server-Side Search,
-Filter &amp;amp; Pagination Engine
-(SQL WHERE, ORDER BY, LIMIT)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="600" width="220" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="17" value="P6: Bulk Rent Reconciliation
-&amp;amp; Match Classifier
-(matched/underpaid/overpaid/unmatched)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="40" y="370" width="220" height="85" as="geometry" />
-        </mxCell>
-        <mxCell id="18" value="D6: rent_payments
-(id, unit_id, amount, month,
-paid_at, payment_method)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="320" y="380" width="210" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="19" value="P7: Rent Roll Ledger &amp;amp;
-RFC 4180 CSV Exporter
-(Active Units &amp;amp; Balances)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="40" y="510" width="210" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="20" value="P8: Overdue Rent Alerts
-&amp;amp; Recurrence Engine
-(Grace Days &amp;amp; Month Dismissals)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="40" y="640" width="220" height="85" as="geometry" />
-        </mxCell>
-        <mxCell id="21" value="D7: rent_alert_dismissals
-(id, unit_id, month,
-dismissed_by, dismissed_at)" style="shape=partialRectangle;top=0;bottom=0;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#14532d;align=center;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="320" y="650" width="210" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="22" value="P10: Executive Dashboard
-Analytics &amp;amp; Trend Aggregator
-(4 KPIs, Breakdowns, 8-Week Trend)" style="shape=ellipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;align=center;" vertex="1" parent="1">
-          <mxGeometry x="320" y="790" width="260" height="85" as="geometry" />
-        </mxCell>
-        <mxCell id="23" value="1. Email &amp;amp; Password" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="6">
+        <mxCell id="13" value="Add or edit apartments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="24" value="1. Email &amp;amp; Password" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="5" target="6">
+        <mxCell id="14" value="Record rent payments received" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="7">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="25" value="Query user &amp;amp; verify bcrypt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="6" target="7">
+        <mxCell id="15" value="See overdue rent alerts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="7" target="4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="26" value="Issued JWT (role: manager)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="6" target="4">
+        <mxCell id="16" value="Log repair &amp;amp; pick contractor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="4" target="8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="27" value="Issued JWT (role: contractor)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="6" target="5">
+        <mxCell id="17" value="View charts &amp;amp; money collected" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="9" target="4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="28" value="Unit CRUD &amp;amp; Archival" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="8">
+        <mxCell id="18" value="View assigned repair jobs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="8" target="5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="29" value="INSERT/UPDATE/SELECT
-(is_archived: 0/1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="8" target="9">
+        <mxCell id="19" value="Mark job fixed &amp;amp; add work notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="5" target="8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="30" value="Create / Triage / Schedule / Resolve" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="10">
+        <mxCell id="20" value="Save / update apartment list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="6" target="10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="31" value="Report issue / Resolve assigned" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="5" target="10">
+        <mxCell id="21" value="Lookup rent amounts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="7">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="32" value="Check assigned contractor count
-(Scheduled requires &amp;gt;= 1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="10" target="13">
+        <mxCell id="22" value="Save rent payments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="7" target="11">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="33" value="UPDATE status / Reopen to Triaged" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="10" target="12">
+        <mxCell id="23" value="Save repair status &amp;amp; notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="8" target="12">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="34" value="Assign / Unassign Contractor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="11">
+        <mxCell id="24" value="Check building address" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="35" value="INSERT/DELETE contractor join" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="11" target="13">
+        <mxCell id="25" value="Sum payments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="11" target="9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="36" value="Log lifecycle transition" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="10" target="14">
+        <mxCell id="26" value="Count repairs completed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="12" target="9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="37" value="Log assignment event" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="11" target="14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="38" value="Add work notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="5" target="14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="39" value="Add manager notes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="40" value="Append-only INSERT
-(PUT/PATCH/DELETE rejected 405)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="14" target="15">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="41" value="Search / Filter / Paginate (All)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="16">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="42" value="Search / Filter (Scoped to assigned)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="5" target="16">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="43" value="Query requests &amp;amp; joins" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="16" target="12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="44" value="Batch Unit IDs &amp;amp; Amounts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="17">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="45" value="Lookup unit rent &amp;amp; id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="17" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="46" value="Atomic batch INSERT payments" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="17" target="18">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="47" value="4-Tier Match Report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="17" target="4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="48" value="Request Rent Roll / Download CSV" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="19">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="49" value="Calculate balance due" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="19" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="50" value="Sum payments for month" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="19" target="18">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="51" value="RFC 4180 CSV Attachment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="19" target="4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="52" value="Evaluate grace_days &amp;amp; unpaid rent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="20" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="53" value="Check payments for month M" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="20" target="18">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="54" value="Check dismissal record for month M" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="20" target="21">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="55" value="Dismiss alert for unit in month M" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="4" target="20">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="56" value="INSERT dismissal (unit_id, month)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="20" target="21">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="57" value="Badge counter &amp;amp; overdue list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="20" target="4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="58" value="Aggregate active units" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="22" target="9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="59" value="Aggregate open / resolved requests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="22" target="12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="60" value="Rolling 8-week weekly buckets" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="22" target="15">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="61" value="Sum collected rent for month" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="22" target="18">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="62" value="Headline KPIs &amp;amp; Trend Chart" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;fontSize=10;fontColor=#0f172a;" edge="1" parent="1" source="22" target="4">
+        <mxCell id="27" value="Total active units" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.8;fontSize=11;fontColor=#0f172a;" edge="1" parent="1" source="10" target="9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
