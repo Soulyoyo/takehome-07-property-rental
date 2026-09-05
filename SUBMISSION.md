@@ -4,7 +4,7 @@ Fill this in and commit it. This is the first file we open.
 
 ## Links
 
-- **GitHub repository:** https://github.com/apex-property-mgmt/takehome-07-property-rental
+- **GitHub repository:** https://github.com/soulyoyo/takehome-07-property-rental
 - **Live application:** http://localhost:4000 (Unified production server running locally and deployable to Render / Railway / Supabase)
 
 ## Notes for the reviewer
