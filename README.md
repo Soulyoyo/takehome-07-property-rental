@@ -1,5 +1,9 @@
 # Assignment 07 — Property Rental & Maintenance
 
+> 🚀 **Live Deployed Application:** **[https://takehome-07-property-rental-j36k.onrender.com](https://takehome-07-property-rental-j36k.onrender.com)**  
+> 🔗 **Public GitHub Repository:** **[https://github.com/Soulyoyo/takehome-07-property-rental](https://github.com/Soulyoyo/takehome-07-property-rental)**  
+> 📄 **Submission & Reviewer Notes:** [`SUBMISSION.md`](SUBMISSION.md)
+
 ## Application Interface Snapshots
 
 Complete gallery of the 15 production UI snapshots showcasing all 10 required architectural goals:
@@ -232,8 +236,9 @@ Because this repository is architected as a **single unified service** (Express 
    - **Start Command**: `npm start`
    - **Instance Type**: `Free`
 5. Click **Deploy Web Service**.
-6. Render will compile the TypeScript server in seconds, launch the unified service, seed the synthetic dataset, and assign you a free public HTTPS URL (e.g. `https://takehome-07-property-rental.onrender.com`).
-7. Paste this URL into [`SUBMISSION.md`](SUBMISSION.md) under `## Links -> Live application:`.
+6. Render will compile the TypeScript server in seconds, launch the unified service, seed the synthetic dataset, and assign you a free public HTTPS URL:
+   👉 **`https://takehome-07-property-rental-j36k.onrender.com`**
+7. This URL is recorded in [`SUBMISSION.md`](SUBMISSION.md) under `## Links -> Live application:`.
 
 ## How to submit
 

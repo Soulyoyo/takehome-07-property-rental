@@ -5,7 +5,7 @@ Fill this in and commit it. This is the first file we open.
 ## Links
 
 - **GitHub repository:** https://github.com/soulyoyo/takehome-07-property-rental
-- **Live application:** http://localhost:4000 (Unified production server running locally and deployable to Render / Railway / Supabase)
+- **Live application:** https://takehome-07-property-rental-j36k.onrender.com
 
 ## Notes for the reviewer
 

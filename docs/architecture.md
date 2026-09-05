@@ -103,7 +103,7 @@ To ensure that the application's complex business rules (e.g. grace-period overd
 - **Browser**: React SPA runtime, local token storage (`localStorage`), SVG chart rendering, responsive UI layout.
 - **Backend Host (Node.js Process)**: Express application server, middleware authorization pipelines, business rule state machine, CSV generation pipeline, and SQLite database engine running on the local filesystem.
 - **Deployment Topology**:
-  - In unified hosting (Render / Railway / Container): The Node process hosts both the REST API and the compiled static React SPA bundle, connecting to a local persistent SQLite file.
+  - **Live Production Instance (Render Web Service)**: Deployed at **[`https://takehome-07-property-rental-j36k.onrender.com`](https://takehome-07-property-rental-j36k.onrender.com)**. The Node process hosts both the REST API and the compiled static React SPA bundle (`client/dist`), connecting to a local persistent SQLite file with WAL mode and automatic bootstrap seeding.
   - In split hosting (Vercel + Render + Supabase): The React frontend deploys to Vercel edge CDN, the Express API deploys to Render web service, and the relational persistence points to managed PostgreSQL with Prisma/Drizzle connection string.
 
 ---
