@@ -271,6 +271,35 @@ describe('Assignment 07 — Complete Property Rental & Maintenance Suite', () =>
       assert.equal(reopenTriagedRes.status, 200);
       assert.equal(reopenTriagedRes.body.request.status, 'Triaged');
     });
+
+    test('Contractor can fetch unit options (without rent or tenant info) to report an issue', async () => {
+      const res = await request(app)
+        .get('/api/maintenance/unit-options')
+        .set('Authorization', `Bearer ${contractorToken}`);
+
+      assert.equal(res.status, 200);
+      assert.ok(Array.isArray(res.body.units));
+      assert.ok(res.body.units.length > 0);
+      // Ensure sensitive fields (monthly_rent, tenant_name) are not exposed
+      assert.equal(res.body.units[0].monthly_rent, undefined);
+      assert.equal(res.body.units[0].tenant_name, undefined);
+    });
+
+    test('Contractor can create a maintenance request', async () => {
+      const res = await request(app)
+        .post('/api/maintenance')
+        .set('Authorization', `Bearer ${contractorToken}`)
+        .send({
+          unit_id: 1,
+          title: 'Contractor discovered water stain in drywall',
+          description: 'Spotted water damage near ceiling while inspecting bathroom pipes.',
+          priority: 'high',
+        });
+
+      assert.equal(res.status, 201);
+      assert.equal(res.body.request.status, 'Reported');
+      assert.equal(res.body.request.title, 'Contractor discovered water stain in drywall');
+    });
   });
 
   // ==========================================

@@ -82,8 +82,8 @@ export const MaintenanceView: React.FC = () => {
   const [statusNote, setStatusNote] = useState('');
 
   useEffect(() => {
+    api.maintenance.getUnitOptions().then(res => setUnits(res.units as any)).catch(() => {});
     if (isManager) {
-      api.units.list(false).then(res => setUnits(res.units)).catch(() => {});
       api.auth.listContractors().then(res => setContractors(res.contractors)).catch(() => {});
     }
   }, [isManager]);
@@ -147,13 +147,20 @@ export const MaintenanceView: React.FC = () => {
         description: createDesc,
         priority: createPriority,
       });
-      showToast('Maintenance request reported successfully!', 'success');
+      showToast(
+        isManager
+          ? 'Maintenance request reported successfully!'
+          : 'Maintenance request reported successfully! Forwarded to Property Manager for triage and assignment.',
+        'success'
+      );
       setIsCreateModalOpen(false);
       setCreateTitle('');
       setCreateDesc('');
       setCreateUnitId('');
       loadRequests();
-      handleOpenDetail(res.request.id);
+      if (isManager) {
+        handleOpenDetail(res.request.id);
+      }
     } catch (err: any) {
       showToast(err.message || 'Failed to create request.', 'error');
     }
@@ -520,7 +527,7 @@ export const MaintenanceView: React.FC = () => {
                     <option value="">Select Unit</option>
                     {units.map(u => (
                       <option key={u.id} value={u.id}>
-                        Unit {u.unit_number} — {u.address} ({u.tenant_name})
+                        Unit {u.unit_number} — {u.address}{u.tenant_name ? ` (${u.tenant_name})` : ''}
                       </option>
                     ))}
                   </select>

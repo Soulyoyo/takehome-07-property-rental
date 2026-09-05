@@ -9,6 +9,9 @@ router.use(requireAuth);
 // List & Search (scoped by role inside controller)
 router.get('/', MaintenanceController.list);
 
+// Unit options for reporting requests (accessible to all authenticated users)
+router.get('/unit-options', MaintenanceController.getUnitOptions);
+
 // Create request (manager or contractor)
 router.post('/', MaintenanceController.create);
 

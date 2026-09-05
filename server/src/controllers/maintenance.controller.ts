@@ -38,6 +38,16 @@ export class MaintenanceController {
     }
   }
 
+  static getUnitOptions(req: AuthenticatedRequest, res: Response): void {
+    try {
+      const units = MaintenanceService.getUnitOptions();
+      res.json({ units });
+    } catch (err: any) {
+      const status = err.status || 500;
+      res.status(status).json({ error: err.message || 'Failed to retrieve unit options.' });
+    }
+  }
+
   static getById(req: AuthenticatedRequest, res: Response): void {
     try {
       const user = req.user!;

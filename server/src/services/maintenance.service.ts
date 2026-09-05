@@ -44,6 +44,19 @@ export interface PaginatedResult<T> {
 
 export class MaintenanceService {
   /**
+   * Helper to retrieve minimal unit options for creating maintenance tickets.
+   */
+  static getUnitOptions(customDb?: any): Array<{ id: number; unit_number: string; address: string }> {
+    const db = customDb || getDb();
+    return db.prepare(`
+      SELECT id, unit_number, address
+      FROM units
+      WHERE is_archived = 0
+      ORDER BY unit_number ASC
+    `).all() as Array<{ id: number; unit_number: string; address: string }>;
+  }
+
+  /**
    * Helper to attach contractors to an array of maintenance requests.
    */
   private static attachContractors(requests: MaintenanceRequest[], customDb?: any): void {

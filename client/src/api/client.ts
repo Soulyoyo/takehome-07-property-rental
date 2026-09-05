@@ -97,6 +97,8 @@ export const api = {
         pagination: { total: number; page: number; limit: number; totalPages: number };
       }>(`/maintenance?${query.toString()}`);
     },
+    getUnitOptions: () =>
+      request<{ units: Array<{ id: number; unit_number: string; address: string }> }>('/maintenance/unit-options'),
     getById: (id: number) =>
       request<{ request: MaintenanceRequest }>(`/maintenance/${id}`),
     getTimeline: (id: number) =>
