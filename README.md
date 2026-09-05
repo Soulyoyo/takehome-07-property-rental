@@ -217,6 +217,24 @@ Requirements:
 - Free tiers often sleep when idle and can take a minute or more to wake. Note it in `SUBMISSION.md` if yours does, so a slow first load is not read as a broken deployment.
 - If you cannot get it hosted, submit anyway and record in `SUBMISSION.md` what you tried and where it broke.
 
+### Recommended Free Deployment: Render.com (1-Click Setup)
+
+Because this repository is architected as a **single unified service** (Express 5 serving both the REST API and the compiled React 18 production bundle, with automatic SQLite database seeding on cold boot), it can be deployed on [Render.com](https://render.com) for free in under 3 minutes:
+
+1. **Sign in to [Render](https://render.com)** (sign in with your GitHub account: `soulyoyo`).
+2. Click **New +** (top right) and select **Web Service**.
+3. Select your repository: `Soulyoyo/takehome-07-property-rental`.
+4. Enter the deployment settings:
+   - **Name**: `takehome-07-property-rental` (or your preferred name)
+   - **Runtime**: `Node`
+   - **Branch**: `main`
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Instance Type**: `Free`
+5. Click **Deploy Web Service**.
+6. Render will automatically build the client bundle, compile the TypeScript server, launch the unified service, seed the synthetic dataset, and assign you a free public HTTPS URL (e.g. `https://takehome-07-property-rental.onrender.com`).
+7. Paste this URL into [`SUBMISSION.md`](SUBMISSION.md) under `## Links -> Live application:`.
+
 ## How to submit
 
 Send us:
