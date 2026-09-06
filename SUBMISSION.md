@@ -6,6 +6,8 @@ Fill this in and commit it. This is the first file we open.
 
 - **GitHub repository:** https://github.com/soulyoyo/takehome-07-property-rental
 - **Live application:** https://takehome-07-property-rental-j36k.onrender.com
+- **Video Walkthrough:** [YouTube Demo](https://www.youtube.com/watch?v=N9uK96QK2LA)
+
 
 ## Notes for the reviewer
 
