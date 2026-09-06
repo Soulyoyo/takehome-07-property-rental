@@ -1,7 +1,16 @@
 # Assignment 07 — Property Rental & Maintenance
 
 > 🚀 **Live Deployed Application:** **[https://takehome-07-property-rental-j36k.onrender.com](https://takehome-07-property-rental-j36k.onrender.com)**  
-> 🔗 **Public GitHub Repository:** **[https://github.com/Soulyoyo/takehome-07-property-rental](https://github.com/Soulyoyo/takehome-07-property-rental)**  
+> 🔗 **Public GitHub Repository:** **[https://github.com/Soulyoyo/takehome-07-property-rental](https://github.com/Soulyoyo/takehome-07-property-rental)**
+> ## 📺 Video Walkthrough & Feature Demo
+Watch the complete 2.5-minute architecture, state machine, and feature walkthrough:
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=N9uK96QK2LA">
+    <img src="https://img.youtube.com/vi/N9uK96QK2LA/maxresdefault.jpg" alt="Property Rental System Walkthrough Demo" width="750" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
+  </a>
+  <p><i>▶️ Click the image above to watch the walkthrough on YouTube</i></p>
+</div>
+  
 > 📄 **Submission & Reviewer Notes:** [`SUBMISSION.md`](SUBMISSION.md)
 
 ## Application Interface Snapshots
